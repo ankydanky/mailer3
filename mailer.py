@@ -29,10 +29,10 @@ Sample code:
     sender.send(message)
 
 """
-from __future__ import with_statement
+
 import smtplib
 import threading
-import Queue
+import queue
 import uuid
 
 # this is to support name changes
@@ -128,28 +128,28 @@ class Mailer(object):
         we created in send()
         """
         me = msg.From
-        if isinstance(msg.To, basestring):
+        if isinstance(msg.To, str):
             to = [msg.To]
         else:
             to = list(msg.To)
 
         cc = []
         if msg.CC:
-            if isinstance(msg.CC, basestring):
+            if isinstance(msg.CC, str):
                 cc = [msg.CC]
             else:
                 cc = list(msg.CC)
 
         bcc = []
         if msg.BCC:
-            if isinstance(msg.BCC, basestring):
+            if isinstance(msg.BCC, str):
                 bcc = [msg.BCC]
             else:
                 bcc = list(msg.BCC)
 
         rto = []
         if msg.RTo:
-            if isinstance(msg.RTo, basestring):
+            if isinstance(msg.RTo, str):
                 rto = [msg.RTo]
             else:
                 rto = list(msg.RTo)
@@ -194,7 +194,7 @@ class Message(object):
         attachments = params.get('attachments', None)
         if attachments:
             for attachment in attachments:
-                if isinstance(attachment, basestring):
+                if isinstance(attachment, str):
                     self.attachments.append((attachment, None, None, None, None))
                 else:
                     try:
@@ -267,25 +267,25 @@ class Message(object):
             msg['From'] = self.From
             
         else:
-            subject = unicode(self.Subject, self.charset)
+            subject = str(self.Subject, self.charset)
             msg['Subject'] = str(make_header([(subject, self.charset)]))
-            msg['From'] = str(make_header([(unicode(self.From).encode(self.charset), self.charset)]))
+            msg['From'] = str(make_header([(str(self.From).encode(self.charset), self.charset)]))
 
 
-        if isinstance(self.To, basestring):
+        if isinstance(self.To, str):
             msg['To'] = self.To
         else:
             self.To = list(self.To)
             msg['To'] = ", ".join(self.To)
 
-        if isinstance(self.RTo, basestring):
+        if isinstance(self.RTo, str):
             msg.add_header('reply-to', self.RTo)
         else:
             self.RTo = list(self.RTo)
             msg.add_header('reply-to', ", ".join(self.RTo))
 
         if self.CC:
-            if isinstance(self.CC, basestring):
+            if isinstance(self.CC, str):
                 msg['CC'] = self.CC
             else:
                 self.CC = list(self.CC)
@@ -293,7 +293,7 @@ class Message(object):
 
 
         if self.BCC:
-            if isinstance(self.BCC, basestring):
+            if isinstance(self.BCC, str):
                 msg['BCC'] = self.BCC
             else:
                 self.BCC = list(self.BCC)
@@ -301,7 +301,7 @@ class Message(object):
 
 
         if self.Headers:
-            for key, value in self.Headers.items():
+            for key, value in list(self.Headers.items()):
                 msg[key] = str(value).encode(self.charset)
 
 
@@ -405,7 +405,7 @@ class Manager(threading.Thread):
     def __init__(self, mailer=None, callback=None, **kwargs):
         threading.Thread.__init__(self)
 
-        self.queue = Queue.Queue()
+        self.queue = queue.Queue()
         self.mailer = mailer
         self.abort = False
         self.callback = callback

@@ -104,7 +104,7 @@ class Mailer(object):
         we created in send()
         """
         me = msg.From
-        if isinstance(msg.To, basestring):
+        if isinstance(msg.To, str):
             you = [msg.To]
         else:
             you = list(msg.To)
@@ -177,10 +177,10 @@ class Message(object):
         if self.charset == 'us-ascii':
             msg['Subject'] = self.Subject
         else:
-            subject = unicode(self.Subject, self.charset)
+            subject = str(self.Subject, self.charset)
             msg['Subject'] = str(make_header([(subject, self.charset)]))
         msg['From'] = self.From
-        if isinstance(self.To, basestring):
+        if isinstance(self.To, str):
             msg['To'] = self.To
         else:
             msg['To'] = ", ".join(self.To)

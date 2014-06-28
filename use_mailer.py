@@ -5,9 +5,9 @@ listing 1 for Chapter 3
 
 """
 
-from mailer import Mailer
-from mailer import Message
-import urllib
+from .mailer import Mailer
+from .mailer import Message
+import urllib.request, urllib.parse, urllib.error
 
 msg1 = Message(From="translation@ginstrom.com",
                   To=["translation@ginstrom.com", "software@ginstrom.com"],

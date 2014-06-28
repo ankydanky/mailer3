@@ -30,7 +30,7 @@ Sample code:
 """
 import smtplib
 import threading
-import Queue
+import queue
 import uuid
 
 # this is to support name changes
@@ -117,21 +117,21 @@ class Mailer(object):
         we created in send()
         """
         me = msg.From
-        if isinstance(msg.To, basestring):
+        if isinstance(msg.To, str):
             to = [msg.To]
         else:
             to = list(msg.To)
             
         cc = []
         if msg.CC:
-            if isinstance(msg.CC, basestring):
+            if isinstance(msg.CC, str):
                 cc = [msg.CC]
             else:
                 cc = list(msg.CC)
 
         bcc = []
         if msg.BCC:
-            if isinstance(msg.BCC, basestring):
+            if isinstance(msg.BCC, str):
                 bcc = [msg.BCC]
             else:
                 bcc = list(msg.BCC)            
@@ -163,7 +163,7 @@ class Message(object):
         self.attachments = []
         if attachments:
             for attachment in attachments:
-                if isinstance(attachment, basestring):
+                if isinstance(attachment, str):
                     self.attachments.append((attachment, None))
                 else:
                     try:
@@ -225,19 +225,19 @@ class Message(object):
         if self.charset == 'us-ascii':
             msg['Subject'] = self.Subject
         else:
-            subject = unicode(self.Subject, self.charset)
+            subject = str(self.Subject, self.charset)
             msg['Subject'] = str(make_header([(subject, self.charset)]))
             
         msg['From'] = self.From
         
-        if isinstance(self.To, basestring):
+        if isinstance(self.To, str):
             msg['To'] = self.To
         else:
             self.To = list(self.To)
             msg['To'] = ", ".join(self.To)
             
         if self.CC:
-            if isinstance(self.CC, basestring):
+            if isinstance(self.CC, str):
                 msg['CC'] = self.CC
             else:
                 self.CC = list(self.CC)
@@ -327,7 +327,7 @@ class Manager(threading.Thread):
     def __init__(self, mailer=None, callback=None, **kwargs):
         threading.Thread.__init__(self)
         
-        self.queue = Queue.Queue()
+        self.queue = queue.Queue()
         self.mailer = mailer
         self.abort = False
         self.callback = callback
