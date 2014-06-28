@@ -10,7 +10,7 @@ setup (
     version = "0.1",
     description = "A copy of https://pypi.python.org/pypi/mailer with 2to3 run over all the .py files.",
     author = "Joe Borg",
-    url = "https://github.com/joedborg/mailer",
+    url = "https://github.com/joedborg/mailer3",
     py_modules = ["mailer"],
     keywords = ["email", "smtp"],
     license = "MIT License",
