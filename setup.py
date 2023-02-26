@@ -2,8 +2,8 @@ from setuptools import setup
 import sys
 
 extra = {}
-if sys.version_info >= (3,0):
-    extra.update( use_2to3 = True )
+#if sys.version_info >= (3,0):
+#    extra.update( use_2to3 = True )
 
 setup (
     name = 'mailer3',
